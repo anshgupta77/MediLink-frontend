@@ -10,11 +10,17 @@ const Navbar = () => {
     const { token, setToken, userData } = useContext(AppContext);
 
     const [showMenu, setShowMenu] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+
 
     const logout = () => {
         navigate('/');
         setToken(false);
         localStorage.removeItem('token');
+    }
+
+    const handleAdminLogin = () => {
+       window.open("https://doc-on-admin.vercel.app/", "_blank") 
     }
 
     return (
@@ -50,22 +56,23 @@ const Navbar = () => {
                     <li className='py-1'>CONTACT</li>
                     <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
                 </NavLink>
+                <button className='text-black px-4 py-1 text-xs rounded-full font-light outline-2 outline-black border-2 border-black' onClick={handleAdminLogin}>Admin login</button>
             </ul>
             <div className='flex items-center gap-4'>
                 {
                     token && userData
-                        ? <div className='flex items-center gap-2 cursor-pointer group relative'>
-                            <img className='w-8 rounded-full' src={userData.image} alt="" />
-                            <img className='w-2.5' src={assets.dropdown_icon} alt="" />
-                            <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
+                        ? <div className='flex items-center gap-2 group relative cursor-pointer' onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                            <img className='w-8 rounded-full cursor-pointer' src={userData.image} alt="" />
+                            <img className='w-2.5 cursor-pointer' src={assets.dropdown_icon} alt="" />
+                            {showProfileMenu && <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 '>
                                 <div className='min-w-40 bg-stone-100 rounded flex flex-col gap-4 p-4'>
                                     <p onClick={() => navigate('/my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
                                     <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appoitments</p>
                                     <p onClick={() => logout()} className='hover:text-black cursor-pointer'>Logout</p>
                                 </div>
-                            </div>
+                            </div>}
                         </div>
-                        : <button onClick={() => navigate('/login')} className='bg-primary text-white px-9 py-3 rounded-full font-light hidden md:block'>Create Account</button>
+                        : <button onClick={() => navigate('/login')} className='bg-primary text-white px-4 py-3 text-xs sm:text-sm sm:px-9 sm:py-3 rounded-full font-light'>Create Account</button>
                 }
                 <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
 
@@ -75,11 +82,12 @@ const Navbar = () => {
                         <img className='w-36' src={assets.logo} alt="" />
                         <img className='w-7' onClick={() => setShowMenu(false)} src={assets.cross_icon} alt="" />
                     </div>
-                    <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium'>
-                        <NavLink onClick={() => setShowMenu(false)} to="/"><p className='px-4 py-2 rounded inline-block'>HOME</p></NavLink>
-                        <NavLink onClick={() => setShowMenu(false)} to="/doctors"><p className='px-4 py-2 rounded inline-block'>ALL DOCTORS</p></NavLink>
-                        <NavLink onClick={() => setShowMenu(false)} to="/about"><p className='px-4 py-2 rounded inline-block'>ABOUT</p></NavLink>
-                        <NavLink onClick={() => setShowMenu(false)} to="/contact"><p className='px-4 py-2 rounded inline-block'>CONTACT</p></NavLink>
+                    <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium justify-between'>
+                            <NavLink onClick={() => setShowMenu(false)} to="/"><p className='px-4 py-2 rounded inline-block'>HOME</p></NavLink>
+                            <NavLink onClick={() => setShowMenu(false)} to="/doctors"><p className='px-4 py-2 rounded inline-block'>ALL DOCTORS</p></NavLink>
+                            <NavLink onClick={() => setShowMenu(false)} to="/about"><p className='px-4 py-2 rounded inline-block'>ABOUT</p></NavLink>
+                            <NavLink onClick={() => setShowMenu(false)} to="/contact"><p className='px-4 py-2 rounded inline-block'>CONTACT</p></NavLink>
+                        <button className='text-black px-4 py-1 text-xs rounded-full font-light outline-2 outline-black border-2 border-black' onClick={handleAdminLogin}>Admin login</button>
                     </ul>
                 </div>
             </div>

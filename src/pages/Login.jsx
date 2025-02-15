@@ -3,6 +3,7 @@ import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
 
@@ -13,6 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -92,14 +94,27 @@ const Login = () => {
         {/* Password */}
         <div className='w-full'>
           <p className='mb-1'>Password</p>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+            >
+              {showPassword ? (
+                <EyeOff size={20} className="text-gray-500" />
+              ) : (
+                <Eye size={20} className="text-gray-500" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Submit Button */}
@@ -125,7 +140,6 @@ const Login = () => {
         </div>
       </div>
     </form>
-
   )
 }
 
