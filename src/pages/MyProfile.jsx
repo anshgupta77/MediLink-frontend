@@ -149,6 +149,7 @@ const MyProfile = () => {
                 onChange={(e) => setUserData(prev => ({ ...prev, gender: e.target.value }))}
                 className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
               >
+                <option value="Not Seleted">Not Selected</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>

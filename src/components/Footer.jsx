@@ -12,13 +12,13 @@ const Footer = () => {
                             onClick={() => navigate("/")}
                             className='w-14 cursor-pointer'
                             src={assets.logo}
-                            alt="Appointify Logo"
+                            alt="DocOn Logo"
                         />
                         <h1
                             onClick={() => navigate("/")}
                             className='text-2xl font-bold'
                         >
-                            Appointify
+                            DocOn
                         </h1>
                     </div>
                     <p className='w-full md:w-2/3 text-gray-600 leading-6'>"Your time is precious, and so is your health. Let us take care of both."</p>
@@ -39,8 +39,8 @@ const Footer = () => {
                 <div>
                     <p className='text-xl font-medium mb-5'>GET IN TOUCH</p>
                     <ul className='flex flex-col gap-2 text-gray-600'>
-                        <li>+91-8057260114</li>
-                        <li>shreynbd@gmail.com</li>
+                        <li>+91-9105220998</li>
+                        <li>kumarguptaansh0@gmail.com</li>
                     </ul>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const Footer = () => {
             {/* ---------- Copyright Text ---------- */}
             <div>
                 <hr />
-                <p className='py-5 text-sm text-center'>Copyright 2024@ Appointify - All Right Reserved.</p>
+                <p className='py-5 text-sm text-center'>Copyright 2024@ DocOn - All Right Reserved.</p>
             </div>
         </div>
     )

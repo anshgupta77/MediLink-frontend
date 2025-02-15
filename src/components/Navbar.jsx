@@ -24,13 +24,13 @@ const Navbar = () => {
                     onClick={() => navigate("/")}
                     className='w-14 cursor-pointer'
                     src={assets.logo}
-                    alt="Appointify Logo"
+                    alt="DocOn Logo"
                 />
                 <h1
                     onClick={() => navigate("/")}
                     className='text-2xl font-bold cursor-pointer'
                 >
-                    Appointify
+                    DocOn
                 </h1>
             </div>
             <ul className='hidden md:flex items-start gap-5 font-medium'>
