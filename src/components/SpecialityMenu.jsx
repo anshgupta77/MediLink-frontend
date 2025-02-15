@@ -12,7 +12,7 @@ const SpecialityMenu = () => {
       </p>
 
       {/* Speciality List */}
-      <div className='flex flex-wrap justify-center gap-6 pt-8 w-full'>
+      <div className='grid gap-3 sm:grid-cols-6 grid-cols-2'>
         {specialityData.map((item, index) => (
           <Link
             onClick={() => scrollTo(0, 0)}

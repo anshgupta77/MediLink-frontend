@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AppContext } from '../context/AppContext';
 import { assets } from '../assets/assets_frontend/assets';
+import editImage from "../assets/assets_frontend/editImage.png"
 
 const MyProfile = () => {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } = useContext(AppContext);
@@ -44,7 +45,7 @@ const MyProfile = () => {
     <div className="max-w-4xl mx-auto p-8 bg-white shadow-2xl rounded-lg mt-10 hover:shadow-3xl transition-shadow duration-500 transform">
       {/* Profile Header */}
       <div className="flex items-center justify-between mb-10">
-        <div className="flex items-center space-x-8">
+        <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-0 sm:items-end space-x-8 w-full" >
           {/* Profile Image */}
           {isEdit ? (
             <label htmlFor="image" className="cursor-pointer">
@@ -57,28 +58,30 @@ const MyProfile = () => {
           ) : (
             <img src={userData.image} alt="Profile" className="w-28 h-28 rounded border-4 border-gray-400 shadow-xl hover:shadow-2xl transition duration-500" />
           )}
+         <div className='flex flex-row justify-between w-full'>
 
           {isEdit ? (
             <input
-              value={userData.name}
-              type="text"
-              onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))}
-              className="text-4xl font-bold border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500 ease-in-out"
+            value={userData.name}
+            type="text"
+            onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))}
+            className="text-lg text-2xl text-blue-800 font-bold border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500 ease-in-out"
             />
           ) : (
-            <p className="text-4xl font-bold text-gray-900 hover:text-blue-500 transition duration-300">{userData.name}</p>
+            <p className="text-lg sm:text-2xl text-blue-800 font-bold  hover:text-blue-500 transition duration-300">{userData.name}</p>
           )}
-        </div>
         <div>
           {isEdit ? (
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg shadow-xl hover:bg-gradient-to-l transform transition duration-500 hover:scale-110 focus:outline-none" onClick={updateUserProfileData}>
-              Save Information
+            <button className="bg-green-600 text-white text-xs px-3 py-2 sm:px-6 sm:py-2 rounded-lg shadow-xl hover:bg-gradient-to-l transform transition duration-500 hover:scale-110 focus:outline-none" onClick={updateUserProfileData}>
+              Save
             </button>
           ) : (
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg shadow-xl hover:bg-gradient-to-l transform transition duration-500 hover:scale-110 focus:outline-none" onClick={() => setIsEdit(true)}>
-              Edit
-            </button>
+            <img className="w-10 h-10 px-2 py-2 rounded-lg hover:bg-gradient-to-l transform transition duration-500 hover:scale-105 focus:outline-none" onClick={() => setIsEdit(true)} src={editImage}> 
+              
+            </img>
           )}
+        </div>
+          </div>
         </div>
       </div>
 
