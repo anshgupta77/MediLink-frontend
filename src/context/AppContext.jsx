@@ -15,20 +15,22 @@ const AppContextProvider = (props) => {
     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false);
     const [userData, setUserData] = useState(false);
     const [speciality, setSpeciality] = useState(false);
+    const [search, setSearch] = useState("");
 
 
     const getDoctorsData = async () => {
-        const url = speciality 
-            ? `${backendUrl}/api/doctor/list?speciality=${speciality}`
-            : `${backendUrl}/api/doctor/list`;
+        
 
-        console.log("Speciality", speciality);
         try {
+            let url = `${backendUrl}/api/doctor/list`;
+
+            if (speciality || search !== "") {
+                url += `?${speciality ? `speciality=${speciality}&` : ""}${search !== "" ? `search=${search}` : ""}`;
+            }
             const { data } = await axios.get(url);
+            console.log(data , "Speciality", speciality)
             if (data.success) {
-                console.log(data);
                 setDoctors(data.doctors)
-                console.log(doctors);
             }
             else {
                 toast.error(data.message);
@@ -64,12 +66,13 @@ const AppContextProvider = (props) => {
         backendUrl,
         userData, setUserData,
         loadUserProfileData,
-        speciality,setSpeciality
+        speciality,setSpeciality,
+        setSearch, search
     }
 
     useEffect(() => {
         getDoctorsData();
-    }, [speciality])
+    }, [speciality, search])
 
     useEffect(() => {
         if (token) {
