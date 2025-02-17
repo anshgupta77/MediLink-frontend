@@ -65,7 +65,7 @@ const MyAppointments = () => {
           {/* Doctor Image */}
           <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
             <img
-              src={item.docData.image}
+              src={item.appointment.docData.image}
               alt="Doctor"
               className="w-full h-96 sm:h-96 lg:h-56 object-cover rounded-lg shadow-md border border-gray-300"
             />
@@ -73,31 +73,31 @@ const MyAppointments = () => {
 
           {/* Doctor Information */}
           <div className="w-full lg:w-2/4 mb-4 lg:mb-0 px-2 sm:px-4">
-            <p className="text-lg lg:text-xl font-semibold text-gray-800">{item.docData.name}</p>
-            <p className="text-gray-600 mb-1 sm:mb-2">{item.docData.speciality}</p>
+            <p className="text-lg lg:text-xl font-semibold text-gray-800">{item.appointment.docData.name}</p>
+            <p className="text-gray-600 mb-1 sm:mb-2">{item.appointment.docData.speciality}</p>
             <p className="text-gray-500">Address:</p>
-            <p className="text-gray-800">{item.docData.address.line1}</p>
-            <p className="text-gray-800 mb-2 sm:mb-4">{item.docData.address.line2}</p>
+            <p className="text-gray-800">{item.appointment.docData.address.line1}</p>
+            <p className="text-gray-800 mb-2 sm:mb-4">{item.appointment.docData.address.line2}</p>
             <p className="text-gray-800">
-              <span className="font-semibold">Date & Time:</span> {slotDateFormate(item.slotDate)} | {item.slotTime}
+              <span className="font-semibold">Date & Time:</span> {slotDateFormate(item.appointment.slotDate)} | {item.appointment.slotTime}
             </p>
           </div>
 
           {/* Buttons */}
           <div className="w-full lg:w-1/4 flex flex-col space-y-2 lg:space-y-0 lg:space-x-2 lg:flex-row">
-            {!item.cancelled && !item.isCompleted &&
+            {!item.appointment.cancelled && !item.appointment.isCompleted &&
               <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
                 Pay Online
               </button>}
-            {!item.cancelled && !item.isCompleted &&
+            {!item.appointment.cancelled && !item.appointment.isCompleted &&
               <button onClick={() => cancelAppointment(item._id)} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out shadow-md">
                 Cancel Appointment
               </button>}
-            {item.cancelled && !item.isCompleted &&
+            {item.appointment.cancelled && !item.appointment.isCompleted &&
               <button className="w-full bg-gray-300 text-gray-600 py-2 px-4 rounded-lg cursor-not-allowed shadow-md">
                 Appointment Cancelled
               </button>}
-            {item.isCompleted &&
+            {item.appointment.isCompleted &&
               <button className="w-full bg-green-600 text-white py-2 px-4 rounded-lg cursor-not-allowed shadow-md">
                 Appointment Completed
               </button>}
