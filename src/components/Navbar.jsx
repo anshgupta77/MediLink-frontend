@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets_frontend/assets'
 import { AppContext } from '../context/AppContext';
 
@@ -11,6 +11,9 @@ const Navbar = () => {
 
     const [showMenu, setShowMenu] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+    const location = useLocation();
+    const path = location.pathname;
 
 
     const logout = () => {
@@ -70,9 +73,9 @@ const Navbar = () => {
                                     <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
                                     <p onClick={() => logout()} className='hover:text-black cursor-pointer'>Logout</p>
                                 </div>
-                            </div>}
+                            </div>} 
                         </div>
-                        : <button onClick={() => navigate('/login')} className='bg-primary text-white px-4 py-3 text-xs sm:text-sm sm:px-9 sm:py-3 rounded-full font-light'>Create Account</button>
+                        :  <button onClick={() => navigate('/login')} className={` text-white px-4 py-3 text-xs sm:text-sm sm:px-9 sm:py-3 rounded-full font-light ${path === "/login" ? "bg-blue-800" : "bg-primary"}`}>Create Account</button>
                 }
                 <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
 

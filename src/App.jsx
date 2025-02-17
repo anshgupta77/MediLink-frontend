@@ -20,6 +20,7 @@ const App = () => {
   const {loading1} = useContext(AppContext);
   if(loading1){
     return (
+      console.log("Loading"),
       <LoadingOverlay/>
     )
   }
