@@ -8,14 +8,21 @@ import Contact from './pages/Contact'
 import MyProfile from './pages/MyProfile'
 import MyAppointments from './pages/MyAppointments'
 import Appointment from './pages/Appointment'
-
+import { useContext } from 'react'
+import { AppContext } from './context/AppContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
-
+import LoadingOverlay from './components/LoadingOverlay'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
+  const {loading1} = useContext(AppContext);
+  if(loading1){
+    return (
+      <LoadingOverlay/>
+    )
+  }
   return (
     <div className='mx-4 sm:mx-[10%]'>
       <ToastContainer />

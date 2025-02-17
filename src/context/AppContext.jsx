@@ -16,11 +16,12 @@ const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false);
     const [speciality, setSpeciality] = useState(false);
     const [search, setSearch] = useState("");
+    const [loading1, setLoading1] = useState(true);
+    const [loading2, setLoading2] = useState(false);
 
 
     const getDoctorsData = async () => {
         
-
         try {
             let url = `${backendUrl}/api/doctor/list`;
 
@@ -45,16 +46,12 @@ const AppContextProvider = (props) => {
 
         try {
             const { data } = await axios.get(`${backendUrl}/api/user/get-profile`, { headers: { token } });
-            if (data.success) {
-                setUserData(data.userData);
-            }
-            else {
-                toast.error(data.message);
-            }
+            setUserData(data.userData);
 
         } catch (error) {
-            console.error(error);
-            toast.error(error.message);
+            console.error(error?.response?.data?.message || "Something went wrong");
+        } finally {
+            setLoading1(false);
         }
 
     }
@@ -67,7 +64,9 @@ const AppContextProvider = (props) => {
         userData, setUserData,
         loadUserProfileData,
         speciality,setSpeciality,
-        setSearch, search
+        setSearch, search,
+        loading1, setLoading1,
+        loading2, setLoading2
     }
 
     useEffect(() => {
@@ -75,11 +74,9 @@ const AppContextProvider = (props) => {
     }, [speciality, search])
 
     useEffect(() => {
-        if (token) {
-            loadUserProfileData();
-        } else {
-            setUserData(false);
-        }
+        setLoading1(true)
+        console.log("Token found", token)
+        loadUserProfileData();
     }, [token])
 
     return (

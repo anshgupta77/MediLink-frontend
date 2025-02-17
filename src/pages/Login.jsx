@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const Login = () => {
 
@@ -15,10 +16,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
 
       if (state === "Sign Up") {
@@ -44,7 +46,9 @@ const Login = () => {
         }
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -122,7 +126,10 @@ const Login = () => {
           type='submit'
           className="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
         >
-          {state === "Sign Up" ? "Create Account" : "Login"}
+          <div className="flex items-center justify-center gap-2">
+            {loading && <Loader2 className="text-white animate-spin" />}
+            {state === "Sign Up" ? "Create Account" : "Login"}
+          </div>
         </button>
 
         {/* Toggle Sign Up / Login */}
@@ -134,6 +141,7 @@ const Login = () => {
               onClick={() => setState(state === "Sign Up" ? "Login" : "Sign Up")}
               className="ml-1 text-blue-600 hover:underline focus:outline-none"
             >
+              
               {state === "Sign Up" ? "Login" : "Sign Up"}
             </button>
           </p>
