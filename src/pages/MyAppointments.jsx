@@ -1,11 +1,15 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import RemoveConfirmation from '../components/RemoveConfirm';
+
 
 const MyAppointments = () => {
   const { backendUrl, token, getDoctorsData } = useContext(AppContext);
-
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -48,6 +52,32 @@ const MyAppointments = () => {
 
   }
 
+  const handleConfirmDelete = async (appointmentId) => {
+    try {
+      const { data } = await axios.post(`${backendUrl}/api/user/remove-appointment`, { appointmentId }, { headers: { token } });
+      if (data.success) {
+        toast.success(data.message);
+        getUserAppointments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response.data.message || "Something went wrong");
+    }
+
+  }
+
+  const handleRemoveClick = (appointment) => {
+    if(!appointment.cancelled && !appointment.isCompleted){
+      return toast.error("Required to cancel the appointment first");
+    }
+    setSelectedAppointment(appointment);
+    setShowRemoveModal(true);
+  }
+
+
+
   useEffect(() => {
     if (token) {
       getUserAppointments();
@@ -60,10 +90,22 @@ const MyAppointments = () => {
       {appointments.map((item, index) => (
         <div
           key={index}
-          className="flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white p-4 sm:p-6 mb-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+          className="bg-white p-4 sm:p-6 mb-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative"
         >
-          {/* Doctor Image */}
-          <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
+          {/* Cross button at top-right */}
+           {<div className='w-full flex justify-end mb-2'>
+            <button
+              onClick={() => handleRemoveClick(item.appointment)} 
+              className=" text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+           </div>}
+           <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center'>
+               <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
             <img
               src={item.appointment.docData.image}
               alt="Doctor"
@@ -90,7 +132,7 @@ const MyAppointments = () => {
                 Pay Online
               </button>}
             {!item.appointment.cancelled && !item.appointment.isCompleted &&
-              <button onClick={() => cancelAppointment(item._id)} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out shadow-md">
+              <button onClick={() => cancelAppointment(item.appointment._id)} className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-300 ease-in-out shadow-md">
                 Cancel Appointment
               </button>}
             {item.appointment.cancelled && !item.appointment.isCompleted &&
@@ -102,10 +144,20 @@ const MyAppointments = () => {
                 Appointment Completed
               </button>}
           </div>
+           </div>
         </div>
       ))}
+      <RemoveConfirmation
+        isOpen={showRemoveModal}
+        onClose={() => setShowRemoveModal(false)}
+        onConfirm={()=>handleConfirmDelete(selectedAppointment?._id)}
+        DeleteDataName={selectedAppointment?.docData.name}
+      />
     </div>
+
+    
   );
 };
 
 export default MyAppointments;
+
