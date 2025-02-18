@@ -46,7 +46,7 @@ const RemoveConfirmation = ({ isOpen, onClose, onConfirm, DeleteDataName }) => {
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-blue-950">
-                    Are you sure you want to remove{' '}
+                    Are you sure to remove{' '}
                     <span className="font-medium text-gray-700">"{DeleteDataName}"</span> from your appointment history?
                     This action cannot be undone.
                   </p>
