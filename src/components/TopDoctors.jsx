@@ -9,7 +9,7 @@ const TopDoctors = () => {
     const { doctors } = useContext(AppContext);
 
     return (
-        <div className='relative flex flex-col items-center gap-8 my-4 px-6 md:px-10 text-[#e5d7f5] py-16'>
+        <div className='relative flex flex-col items-center gap-8 px-6 md:px-10 text-[#e5d7f5] py-16'>
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNTAgMjVsNiA2TDI1IDYySDYybC02LTZMMjUgMjV6IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDIiLz48L3N2Zz4=')] opacity-20"/>
 

@@ -4,7 +4,7 @@ import { ArrowRight, Heart } from 'lucide-react';
 
 const Header = () => {
     return (
-        <div className='relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 mt-5'>
+        <div className='relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700'>
             <div className='absolute top-0 left-0 w-full h-full'>
                 <div className='absolute top-10 left-10 w-20 h-20 bg-purple-400 rounded-full blur-3xl opacity-20 animate-pulse'></div>
                 <div className='absolute bottom-10 right-10 w-32 h-32 bg-indigo-300 rounded-full blur-3xl opacity-20 animate-pulse delay-700'></div>
