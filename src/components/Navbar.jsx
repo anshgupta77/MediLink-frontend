@@ -2,19 +2,15 @@ import React, { useContext, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets_frontend/assets'
 import { AppContext } from '../context/AppContext';
+import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Navbar = () => {
-
     const navigate = useNavigate();
-
     const { token, setToken, userData } = useContext(AppContext);
-
     const [showMenu, setShowMenu] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
-
     const location = useLocation();
     const path = location.pathname;
-
 
     const logout = () => {
         navigate('/');
@@ -23,75 +19,172 @@ const Navbar = () => {
     }
 
     const handleAdminLogin = () => {
-       window.open("https://doc-on-admin.vercel.app/", "_blank") 
+        window.open("https://doc-on-admin.vercel.app/", "_blank")
     }
 
     return (
-        <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400 '>
-            <div className='flex items-center gap-1'>
-                <img
-                    onClick={() => navigate("/")}
-                    className='w-14 cursor-pointer'
-                    src={assets.logo}
-                    alt="DocOn Logo"
-                />
-                <h1
-                    onClick={() => navigate("/")}
-                    className='text-2xl font-bold cursor-pointer'
-                >
-                    DocOn
-                </h1>
-            </div>
-            <ul className='hidden md:flex items-start gap-5 font-medium'>
-                <NavLink to="/">
-                    <li className='py-1'>HOME</li>
-                    <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
-                </NavLink>
-                <NavLink to="/doctors">
-                    <li className='py-1'>ALL DOCTORS</li>
-                    <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
-                </NavLink>
-                <NavLink to="/about">
-                    <li className='py-1'>ABOUT</li>
-                    <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
-                </NavLink>
-                <NavLink to="/contact">
-                    <li className='py-1'>CONTACT</li>
-                    <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
-                </NavLink>
-                <button className='text-black px-4 py-1 text-xs rounded-full font-light outline-2 outline-black border-2 border-black' onClick={handleAdminLogin}>Admin login</button>
-            </ul>
-            <div className='flex items-center gap-4'>
-                {
-                    (token && userData)
-                        ? <div className='flex items-center gap-2 group relative cursor-pointer' onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                            <img className='w-8 rounded-full cursor-pointer' src={userData.image} alt="" />
-                            <img className='w-2.5 cursor-pointer' src={assets.dropdown_icon} alt="" />
-                            {showProfileMenu && <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 '>
-                                <div className='min-w-40 bg-stone-100 rounded flex flex-col gap-4 p-4'>
-                                    <p onClick={() => navigate('/my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
-                                    <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
-                                    <p onClick={() => logout()} className='hover:text-black cursor-pointer'>Logout</p>
+        <div className='sticky top-0 z-50 bg-[#130e3d] border-b border-indigo-900'>
+            <div className='max-w-7xl mx-auto flex items-center justify-between text-sm py-4 px-4 text-[#d3bccc]'>
+                {/* Logo */}
+                <div className='flex items-center gap-2 hover:opacity-90 transition-opacity'>
+                    {/* <img
+                        onClick={() => navigate("/")}
+                        className='w-14 cursor-pointer'
+                        src=""
+                        alt="MediLink Logo"
+                    /> */}
+                    <h1
+                        onClick={() => navigate("/")}
+                        className='text-2xl font-bold cursor-pointer'
+                    >
+                        MediLink
+                    </h1>
+                </div>
+
+                {/* Desktop Navigation */}
+                <ul className='hidden md:flex items-center gap-8 font-medium'>
+                    <NavLink to="/" className={({ isActive }) => 
+                        `relative py-1 after:content-[""] after:absolute after:w-0 after:h-0.5 
+                         after:bg-[#d3bccc] after:left-0 after:bottom-0 after:transition-all 
+                         hover:after:w-full ${isActive ? 'after:w-full' : ''}`}>
+                        <li>HOME</li>
+                    </NavLink>
+                    <NavLink to="/doctors" className={({ isActive }) => 
+                        `relative py-1 after:content-[""] after:absolute after:w-0 after:h-0.5 
+                         after:bg-[#d3bccc] after:left-0 after:bottom-0 after:transition-all 
+                         hover:after:w-full ${isActive ? 'after:w-full' : ''}`}>
+                        <li>ALL DOCTORS</li>
+                    </NavLink>
+                    <NavLink to="/about" className={({ isActive }) => 
+                        `relative py-1 after:content-[""] after:absolute after:w-0 after:h-0.5 
+                         after:bg-[#d3bccc] after:left-0 after:bottom-0 after:transition-all 
+                         hover:after:w-full ${isActive ? 'after:w-full' : ''}`}>
+                        <li>ABOUT</li>
+                    </NavLink>
+                    <NavLink to="/contact" className={({ isActive }) => 
+                        `relative py-1 after:content-[""] after:absolute after:w-0 after:h-0.5 
+                         after:bg-[#d3bccc] after:left-0 after:bottom-0 after:transition-all 
+                         hover:after:w-full ${isActive ? 'after:w-full' : ''}`}>
+                        <li>CONTACT</li>
+                    </NavLink>
+                    <button 
+                        className='px-4 py-1.5 text-xs rounded-full border border-[#d3bccc] 
+                                 text-[#d3bccc] hover:bg-[#d3bccc] hover:text-[#130e3d] 
+                                 transition-colors' 
+                        onClick={handleAdminLogin}
+                    >
+                        Admin login
+                    </button>
+                </ul>
+
+                {/* User Profile/Login */}
+                <div className='flex items-center gap-4'>
+                    {(token && userData) ? (
+                        <div className='relative'>
+                            <div 
+                                className='flex items-center gap-2 cursor-pointer p-2 rounded-full
+                                         hover:bg-indigo-800/50 transition-colors'
+                                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                            >
+                                <img className='w-8 h-8 rounded-full object-cover' src={userData.image} alt="" />
+                                <ChevronDown size={16} className={`transition-transform ${showProfileMenu ? 'rotate-180' : ''}`} />
+                            </div>
+                            
+                            {showProfileMenu && (
+                                <div className='absolute right-0 mt-2 w-48 py-2 bg-white rounded-lg shadow-xl'>
+                                    <div 
+                                        onClick={() => navigate('/my-profile')} 
+                                        className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
+                                    >
+                                        My Profile
+                                    </div>
+                                    <div 
+                                        onClick={() => navigate('/my-appointments')} 
+                                        className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
+                                    >
+                                        My Appointments
+                                    </div>
+                                    <div 
+                                        onClick={logout} 
+                                        className='px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer'
+                                    >
+                                        Logout
+                                    </div>
                                 </div>
-                            </div>} 
+                            )}
                         </div>
-                        :  <button onClick={() => navigate('/login')} className={` text-white px-4 py-3 text-xs sm:text-sm sm:px-9 sm:py-3 rounded-full font-light ${path === "/login" ? "bg-blue-800" : "bg-primary"}`}>Create Account</button>
-                }
-                <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
+                    ) : (
+                        <button 
+                            onClick={() => navigate('/login')} 
+                            className={`px-6 py-2 rounded-full text-sm font-medium
+                                    transition-colors ${path === "/login" 
+                                    ? "bg-blue-800 hover:bg-blue-700" 
+                                    : "bg-[#3828cc] hover:bg-[#4838dc]"}`}
+                        >
+                            Create Account
+                        </button>
+                    )}
+
+                    {/* Mobile Menu Button */}
+                    <button 
+                        onClick={() => setShowMenu(true)} 
+                        className='md:hidden p-2 hover:bg-indigo-800/50 rounded-full transition-colors'
+                    >
+                        <Menu size={24} />
+                    </button>
+                </div>
 
                 {/* Mobile Menu */}
-                <div className={`${showMenu ? "fixed w-full" : "h-0 w-0"} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
-                    <div className='flex items-center justify-between px-5 py-6'>
-                        <img className='w-36' src={assets.logo} alt="" />
-                        <img className='w-7' onClick={() => setShowMenu(false)} src={assets.cross_icon} alt="" />
+                <div className={`fixed inset-0 bg-[#130e3d] transform ${showMenu ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 md:hidden z-50`}>
+                    <div className='flex items-center justify-between p-4 border-b border-indigo-900'>
+                        <div className='flex items-center gap-2'>
+                            <img className='w-14' src={assets.logo} alt="" />
+                            <span className='text-2xl font-bold'>MediLink</span>
+                        </div>
+                        <button 
+                            onClick={() => setShowMenu(false)}
+                            className='p-2 hover:bg-indigo-800/50 rounded-full transition-colors'
+                        >
+                            <X size={24} />
+                        </button>
                     </div>
-                    <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium justify-between'>
-                            <NavLink onClick={() => setShowMenu(false)} to="/"><p className='px-4 py-2 rounded inline-block'>HOME</p></NavLink>
-                            <NavLink onClick={() => setShowMenu(false)} to="/doctors"><p className='px-4 py-2 rounded inline-block'>ALL DOCTORS</p></NavLink>
-                            <NavLink onClick={() => setShowMenu(false)} to="/about"><p className='px-4 py-2 rounded inline-block'>ABOUT</p></NavLink>
-                            <NavLink onClick={() => setShowMenu(false)} to="/contact"><p className='px-4 py-2 rounded inline-block'>CONTACT</p></NavLink>
-                        <button className='text-black px-4 py-1 text-xs rounded-full font-light outline-2 outline-black border-2 border-black' onClick={handleAdminLogin}>Admin login</button>
-                    </ul>
+                    <div className='p-4 space-y-4'>
+                        <NavLink 
+                            to="/" 
+                            onClick={() => setShowMenu(false)}
+                            className='block px-4 py-2 text-lg hover:bg-indigo-800/50 rounded-lg transition-colors'
+                        >
+                            HOME
+                        </NavLink>
+                        <NavLink 
+                            to="/doctors" 
+                            onClick={() => setShowMenu(false)}
+                            className='block px-4 py-2 text-lg hover:bg-indigo-800/50 rounded-lg transition-colors'
+                        >
+                            ALL DOCTORS
+                        </NavLink>
+                        <NavLink 
+                            to="/about" 
+                            onClick={() => setShowMenu(false)}
+                            className='block px-4 py-2 text-lg hover:bg-indigo-800/50 rounded-lg transition-colors'
+                        >
+                            ABOUT
+                        </NavLink>
+                        <NavLink 
+                            to="/contact" 
+                            onClick={() => setShowMenu(false)}
+                            className='block px-4 py-2 text-lg hover:bg-indigo-800/50 rounded-lg transition-colors'
+                        >
+                            CONTACT
+                        </NavLink>
+                        <button 
+                            className='w-full px-4 py-2 text-lg text-center border border-[#d3bccc] 
+                                     rounded-lg hover:bg-indigo-800/50 transition-colors' 
+                            onClick={handleAdminLogin}
+                        >
+                            Admin login
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

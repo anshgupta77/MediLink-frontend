@@ -84,7 +84,7 @@ const Doctors = () => {
   return (
     <div>
       {/* Hero Section with Search */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-8 px-4 rounded-2xl mb-8">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-8 px-4 rounded-2xl mb-8 ">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-primary mb-4 text-center">
             Find Your Healthcare Specialist

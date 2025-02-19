@@ -25,7 +25,7 @@ const App = () => {
     )
   }
   return (
-    <div className='mx-4 sm:mx-[10%]'>
+    <div className='bg-[#130e3d] text-[#d3bccc]'>
       <ToastContainer />
       <Navbar />
       <Routes>

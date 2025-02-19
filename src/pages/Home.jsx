@@ -6,11 +6,11 @@ import Banner from '../components/Banner'
 
 const Home = () => {
   return (
-    <div>
+    <div className='sm:mx-[10%] mx-4'>
       <Header />
       <SpecialityMenu />
-      <TopDoctors />
       <Banner />
+      <TopDoctors />
     </div>
   )
 }
