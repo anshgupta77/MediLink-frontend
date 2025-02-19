@@ -1,16 +1,19 @@
+
+
 import React, { useContext, useState } from 'react';
+import { AppContext } from '../context/AppContext';
+import { Camera, Save, Pencil, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { AppContext } from '../context/AppContext';
-import { assets } from '../assets/assets_frontend/assets';
-import editImage from "../assets/assets_frontend/editImage.png"
 
 const MyProfile = () => {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } = useContext(AppContext);
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const updateUserProfileData = async () => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", userData.name);
@@ -18,15 +21,12 @@ const MyProfile = () => {
       formData.append("address", JSON.stringify(userData.address));
       formData.append("gender", userData.gender);
       formData.append("dob", userData.dob);
-
-      if (image) {
-        formData.append("image", image);
-      }
+      if (image) formData.append("image", image);
 
       const { data } = await axios.post(`${backendUrl}/api/user/update-profile`, formData, {
         headers: { token }
       });
-
+      
       if (data.success) {
         toast.success(data.message);
         await loadUserProfileData();
@@ -38,141 +38,139 @@ const MyProfile = () => {
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   return userData && (
-    <div className="max-w-4xl mx-auto p-8 bg-white shadow-2xl rounded-lg mt-10 hover:shadow-3xl transition-shadow duration-500 transform">
-      {/* Profile Header */}
-      <div className="flex items-center justify-between mb-10">
-        <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-0 sm:items-end space-x-8 w-full" >
-          {/* Profile Image */}
-          {isEdit ? (
-            <label htmlFor="image" className="cursor-pointer">
-              <div className="relative">
-                <img src={image ? URL.createObjectURL(image) : userData.image} alt="Profile" className="w-28 h-28 rounded border-4 border-gray-300 shadow-xl hover:shadow-2xl transition duration-500" />
-                <img src={assets.upload_icon} alt="Upload Icon" className="absolute top-0 right-0 w-8 h-8 bg-blue-500 p-1 rounded shadow-md transform translate-x-2 -translate-y-2" />
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-purple-500/20 h-48 relative">
+            <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2">
+              <div className="relative group">
+                <div className="w-40 h-40 rounded-full border-4 border-purple-400/30 overflow-hidden bg-white/10">
+                  <img 
+                    src={image ? URL.createObjectURL(image) : userData.image} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover"
+                  />
+                  {isEdit && (
+                    <label htmlFor="image" className="absolute inset-0 bg-black/50 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Camera className="w-8 h-8 text-white" />
+                      <input type="file" id="image" hidden onChange={(e) => setImage(e.target.files[0])} />
+                    </label>
+                  )}
+                </div>
               </div>
-              <input onChange={(e) => setImage(e.target.files[0])} type="file" id="image" hidden />
-            </label>
-          ) : (
-            <img src={userData.image} alt="Profile" className="w-28 h-28 rounded border-4 border-gray-400 shadow-xl hover:shadow-2xl transition duration-500" />
-          )}
-         <div className='flex flex-row justify-between w-full'>
-
-          {isEdit ? (
-            <input
-            value={userData.name}
-            type="text"
-            onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))}
-            className="text-lg text-2xl text-blue-800 font-bold border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500 ease-in-out"
-            />
-          ) : (
-            <p className="text-lg sm:text-2xl text-blue-800 font-bold  hover:text-blue-500 transition duration-300">{userData.name}</p>
-          )}
-        <div>
-          {isEdit ? (
-            <button className="bg-green-600 text-white text-xs px-3 py-2 sm:px-6 sm:py-2 rounded-lg shadow-xl hover:bg-gradient-to-l transform transition duration-500 hover:scale-110 focus:outline-none" onClick={updateUserProfileData}>
-              Save
-            </button>
-          ) : (
-            <img className="w-10 h-10 px-2 py-2 rounded-lg hover:bg-gradient-to-l transform transition duration-500 hover:scale-105 focus:outline-none" onClick={() => setIsEdit(true)} src={editImage}> 
-              
-            </img>
-          )}
-        </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Contact Information */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-500 mb-8">
-        <h2 className="text-lg font-semibold mb-6 text-gray-800">Contact Information</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {/* Email */}
-          <div>
-            <p className="text-gray-500">Email Address</p>
-            <p className="font-medium text-gray-900 hover:text-blue-500 transition duration-300">{userData.email}</p>
-          </div>
-          {/* Phone */}
-          <div>
-            <p className="text-gray-500">Phone Number</p>
-            {isEdit ? (
-              <input
-                value={userData.phone}
-                type="text"
-                onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
-              />
-            ) : (
-              <p className="font-medium text-gray-900 hover:text-blue-500 transition duration-300">{userData.phone}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Address Information */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-500 mb-8">
-        <h2 className="text-lg font-semibold mb-6 text-gray-800">Address Information</h2>
-        {isEdit ? (
-          <div className="grid grid-cols-1 gap-4">
-            <input
-              value={userData.address.line1}
-              type="text"
-              onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line1: e.target.value } }))}
-              className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
-              placeholder="Address Line 1"
-            />
-            <input
-              value={userData.address.line2}
-              type="text"
-              onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line2: e.target.value } }))}
-              className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
-              placeholder="Address Line 2"
-            />
-          </div>
-        ) : (
-          <p className="text-gray-900 font-medium">
-            {userData.address.line1}<br />
-            {userData.address.line2}
-          </p>
-        )}
-      </div>
-
-      {/* Basic Information */}
-      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-500">
-        <h2 className="text-lg font-semibold mb-6 text-gray-800">Basic Information</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {/* Gender */}
-          <div>
-            <p className="text-gray-500">Gender</p>
-            {isEdit ? (
-              <select
-                value={userData.gender}
-                onChange={(e) => setUserData(prev => ({ ...prev, gender: e.target.value }))}
-                className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
+          <div className="pt-24 px-8 pb-8">
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-3xl font-semibold text-white">My Profile</h2>
+              <button 
+                onClick={() => isEdit ? updateUserProfileData() : setIsEdit(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-white transition-colors duration-300"
+                style={{ backgroundColor: isEdit ? 'rgb(147, 51, 234)' : 'rgb(139, 92, 246)' }}
               >
-                <option value="Not Seleted">Not Selected</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            ) : (
-              <p className="font-medium text-gray-900 hover:text-blue-500 transition duration-300">{userData.gender}</p>
-            )}
-          </div>
-          {/* Date of Birth */}
-          <div>
-            <p className="text-gray-500">Birthday</p>
-            {isEdit ? (
-              <input
-                type="date"
-                value={userData.dob}
-                onChange={(e) => setUserData(prev => ({ ...prev, dob: e.target.value }))}
-                className="w-full border-b-2 border-gray-300 focus:border-blue-500 focus:outline-none transition duration-500"
-              />
-            ) : (
-              <p className="font-medium text-gray-900 hover:text-blue-500 transition duration-300">{userData.dob}</p>
-            )}
+                <div className="flex items-center gap-2">
+                  {loading && <Loader2 className="animate-spin" />}
+                  {isEdit ? (
+                    <>
+                      <Save className="w-5 h-5" />
+                      Save Changes
+                    </>
+                  ) : (
+                    <>
+                      <Pencil className="w-5 h-5" />
+                      Edit Profile
+                    </>
+                  )}
+                </div>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Name</label>
+                {isEdit ? (
+                  <input 
+                    type="text" 
+                    value={userData.name} 
+                    onChange={(e) => setUserData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-purple-400 text-white placeholder-gray-400"
+                  />
+                ) : (
+                  <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.name}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Email</label>
+                <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.email}</div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Phone</label>
+                {isEdit ? (
+                  <input 
+                    type="text" 
+                    value={userData.phone} 
+                    onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-purple-400 text-white placeholder-gray-400"
+                  />
+                ) : (
+                  <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.phone}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Address</label>
+                {isEdit ? (
+                  <input 
+                    type="text" 
+                    value={userData.address.line1} 
+                    onChange={(e) => setUserData(prev => ({ ...prev, address: { ...prev.address, line1: e.target.value } }))}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-purple-400 text-white placeholder-gray-400"
+                  />
+                ) : (
+                  <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.address.line1}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Gender</label>
+                {isEdit ? (
+                  <select 
+                    value={userData.gender} 
+                    onChange={(e) => setUserData(prev => ({ ...prev, gender: e.target.value }))}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-purple-400 text-white placeholder-gray-400"
+                  >
+                    <option value="Not Selected" className='bg-purple-700 text-white hover:bg-purple-800'>Not Selected</option>
+                    <option value="Male" className='bg-purple-700 text-white hover:bg-purple-800'>Male</option>
+                    <option value="Female" className='bg-purple-700 text-white hover:bg-purple-800'>Female</option>
+                  </select>
+                ) : (
+                  <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.gender}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Birthday</label>
+                {isEdit ? (
+                  <input 
+                    type="date" 
+                    value={userData.dob} 
+                    onChange={(e) => setUserData(prev => ({ ...prev, dob: e.target.value }))}
+                    className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:border-purple-400 text-white placeholder-gray-400"
+                  />
+                ) : (
+                  <div className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white">{userData.dob}</div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -181,3 +179,6 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
+
+
+
