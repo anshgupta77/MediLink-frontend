@@ -44,8 +44,8 @@ const MyProfile = () => {
   };
 
   return userData && (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] py-12 px-4 ">
+      <div className="max-w-4xl mx-auto sm:mb-[7%]">
         <div className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden">
           <div className="bg-purple-500/20 h-48 relative">
             <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2">

@@ -93,19 +93,22 @@ const Navbar = () => {
                             {showProfileMenu && (
                                 <div className='absolute right-0 mt-2 w-48 py-2 bg-white rounded-lg shadow-xl'>
                                     <div 
-                                        onClick={() => navigate('/my-profile')} 
+                                        onClick={() => {
+                                                        navigate('/my-profile');
+                                                        setShowProfileMenu(false);
+                                                        }} 
                                         className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
                                     >
                                         My Profile
                                     </div>
                                     <div 
-                                        onClick={() => navigate('/my-appointments')} 
+                                        onClick={() => {navigate('/my-appointments');setShowProfileMenu(false);}} 
                                         className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
                                     >
                                         My Appointments
                                     </div>
                                     <div 
-                                        onClick={logout} 
+                                        onClick={() =>{logout(); setShowProfileMenu(false);}} 
                                         className='px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer'
                                     >
                                         Logout
