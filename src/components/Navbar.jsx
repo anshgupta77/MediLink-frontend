@@ -91,25 +91,25 @@ const Navbar = () => {
                             </div>
                             
                             {showProfileMenu && (
-                                <div className='absolute right-0 mt-2 w-48 py-2 bg-white rounded-lg shadow-xl'>
+                                <div className='absolute right-0 mt-2 w-48 py-2 bg-[#130e3d] rounded-lg shadow-xl border border-[#d3bccc]'>
                                     <div 
                                         onClick={() => {
                                                         navigate('/my-profile');
                                                         setShowProfileMenu(false);
                                                         }} 
-                                        className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
+                                        className='px-4 py-2 text-[#d3bccc] hover:bg-[#3c299b] cursor-pointer'
                                     >
                                         My Profile
                                     </div>
                                     <div 
                                         onClick={() => {navigate('/my-appointments');setShowProfileMenu(false);}} 
-                                        className='px-4 py-2 text-gray-700 hover:bg-indigo-50 cursor-pointer'
+                                        className='px-4 py-2 text-[#d3bccc] hover:bg-[#3c299b] cursor-pointer'
                                     >
                                         My Appointments
                                     </div>
                                     <div 
                                         onClick={() =>{logout(); setShowProfileMenu(false);}} 
-                                        className='px-4 py-2 text-red-600 hover:bg-red-50 cursor-pointer'
+                                        className='px-4 py-2 text-red-500 hover:bg-[#3c299b] cursor-pointer'
                                     >
                                         Logout
                                     </div>
@@ -141,7 +141,7 @@ const Navbar = () => {
                 <div className={`fixed inset-0 bg-[#130e3d] transform ${showMenu ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 md:hidden z-50`}>
                     <div className='flex items-center justify-between p-4 border-b border-indigo-900'>
                         <div className='flex items-center gap-2'>
-                            <img className='w-14' src={assets.logo} alt="" />
+                            {/* <img className='w-14' src={assets.logo} alt="" /> */}
                             <span className='text-2xl font-bold'>MediLink</span>
                         </div>
                         <button 

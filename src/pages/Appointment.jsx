@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { Info, CheckCircle, Calendar } from 'lucide-react';
 
+import ScrollContainer from '../components/ScrollArrowContainer';
+import LoadingOverlay from '../components/LoadingOverlay';
+
 const Appointment = () => {
   const { docId } = useParams();
   const { doctors, currencySymbol, backendUrl, token, getDoctorsData } = useContext(AppContext);
@@ -18,6 +21,8 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   // Existing functions remain the same
   const fetchDocInfo = async () => {
@@ -90,7 +95,7 @@ const Appointment = () => {
   }
 
   const bookAppointment = async () => {
-
+    setLoading(true);
     if (!token) {
       toast.warn("Please login to book an appointment");
       return navigate('/login');
@@ -117,6 +122,8 @@ const Appointment = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -134,6 +141,8 @@ const Appointment = () => {
   useEffect(() => {
     console.log(docSlots);
   }, [docSlots]);
+
+  if(loading) return <LoadingOverlay />;
 
   return docInfo && (
     <div className="bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] p-6 rounded-2xl">
@@ -190,38 +199,40 @@ const Appointment = () => {
             <div className="mt-8 space-y-6">
               <h2 className="text-xl font-semibold text-white">Select Appointment Time</h2>
               
-              {/* Date Selection */}
-              <div className="flex gap-4 overflow-x-auto pb-2">
-                {docSlots.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSlotIndex(index)}
-                    className={`flex flex-col items-center min-w-[100px] p-4 rounded-xl transition-all duration-300
-                      ${slotIndex === index 
-                        ? "bg-purple-500 text-white" 
-                        : "bg-white/5 text-gray-300 border border-white/10 hover:bg-purple-500/10"}`}
-                  >
-                    <span className="text-sm font-medium">{item[0] && daysofWeek[item[0].datetime.getDay()]}</span>
-                    <span className="text-lg">{item[0] && item[0].datetime.getDate()}</span>
-                  </button>
-                ))}
-              </div>
+            
 
-              {/* Time Slots */}
-              <div className="flex flex-wrap gap-3">
-                {docSlots.length > 0 && docSlots[slotIndex].map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSlotTime(item.time)}
-                    className={`px-6 py-2 rounded-lg transition-all duration-300
-                      ${item.time === slotTime 
-                        ? "bg-purple-500 text-white" 
-                        : "bg-white/5 text-gray-300 border border-white/10 hover:bg-purple-500/10"}`}
-                  >
-                    {item.time.toLowerCase()}
-                  </button>
-                ))}
-              </div>
+              {/* Date Selection */}
+                <ScrollContainer className="flex gap-4 pb-2">
+                  {docSlots.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSlotIndex(index)}
+                      className={`flex flex-col items-center min-w-[100px] p-4 rounded-xl transition-all duration-300
+                        ${slotIndex === index 
+                          ? "bg-purple-500 text-white" 
+                          : "bg-white/5 text-gray-300 border border-white/10 hover:bg-purple-500/10"}`}
+                    >
+                      <span className="text-sm font-medium">{item[0] && daysofWeek[item[0].datetime.getDay()]}</span>
+                      <span className="text-lg">{item[0] && item[0].datetime.getDate()}</span>
+                    </button>
+                  ))}
+                </ScrollContainer>
+
+                {/* Time Slots */}
+                <ScrollContainer className="flex gap-3">
+                  {docSlots.length > 0 && docSlots[slotIndex].map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSlotTime(item.time)}
+                      className={`px-6 py-2 rounded-lg transition-all duration-300
+                        ${item.time === slotTime 
+                          ? "bg-purple-500 text-white" 
+                          : "bg-white/5 text-gray-300 border border-white/10 hover:bg-purple-500/10"}`}
+                    >
+                      {item.time.toLowerCase()}
+                    </button>
+                  ))}
+                </ScrollContainer>
 
               {/* Book Button */}
               <button

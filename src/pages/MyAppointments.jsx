@@ -5,6 +5,7 @@ import { X, CreditCard, Ban, CheckCircle } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import RemoveConfirmation from '../components/RemoveConfirm';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 const MyAppointments = () => {
   const { backendUrl, token, getDoctorsData } = useContext(AppContext);
@@ -12,6 +13,9 @@ const MyAppointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const [loadingGetUserAppointments, setLoadingGetUserAppointments] = useState(false);
+  const [loadingCancelAppointment, setLoadingCancelAppointment] = useState(false);
+  const [loadingRemoveAppointment, setLoadingRemoveAppointment] = useState(false);
 
   const slotDateFormate = (slotDate) => {
     const dateArray = slotDate.split("_");
@@ -19,6 +23,7 @@ const MyAppointments = () => {
   };
 
   const getUserAppointments = async () => {
+    setLoadingGetUserAppointments(true);
     try {
       const { data } = await axios.get(`${backendUrl}/api/user/appointments`, { headers: { token } });
       if (data.success) {
@@ -29,10 +34,13 @@ const MyAppointments = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      setLoadingGetUserAppointments(false);
     }
   };
 
   const cancelAppointment = async (appointmentId) => {
+    setLoadingCancelAppointment(true);
     try {
       const { data } = await axios.post(`${backendUrl}/api/user/cancel-appointment`, { appointmentId }, { headers: { token } });
       if (data.success) {
@@ -45,10 +53,13 @@ const MyAppointments = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      setLoadingCancelAppointment(false);
     }
   };
 
   const handleConfirmDelete = async (appointmentId) => {
+    setLoadingRemoveAppointment(true);
     try {
       const { data } = await axios.post(`${backendUrl}/api/user/remove-appointment`, { appointmentId }, { headers: { token } });
       if (data.success) {
@@ -60,6 +71,9 @@ const MyAppointments = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      setLoadingRemoveAppointment(false);
+      setShowRemoveModal(false);
     }
   };
 
@@ -77,6 +91,11 @@ const MyAppointments = () => {
     }
   }, [token]);
 
+  if(loadingGetUserAppointments || loadingCancelAppointment || loadingRemoveAppointment){
+    return (
+      <LoadingOverlay />
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] py-12 px-4">
       <div className="max-w-4xl mx-auto">
