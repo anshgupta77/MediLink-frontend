@@ -42,7 +42,6 @@ export const assets = {
     header_img,
     appointment_img,
     group_profiles,
-    logo,
     chats_icon,
     verified_icon,
     info_icon,
