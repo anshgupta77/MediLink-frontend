@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { Search, Calendar } from 'lucide-react';
 
@@ -9,6 +9,12 @@ const Doctors = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const navigate = useNavigate();
   const { doctors, setSpeciality, speciality, search, setSearch } = useContext(AppContext);
+
+  let {specialityData} = useParams();
+  useEffect(() => {
+    setSpeciality(specialityData);
+  }, [specialityData]);
+
 
   return (
     <div className="bg-gradient-to-b from-[#1a1445] to-[#2a1d5d] p-6 rounded-2xl">
@@ -26,7 +32,7 @@ const Doctors = () => {
                   </p>
                   
                   {/* Search Container */}
-                  <div className="relative max-w-2xl mx-auto">
+                  <div className="relative mx-auto">
                     <div className={`
                       flex items-center bg-white/5 border border-white/20 rounded-full shadow-xl
                       transition-all duration-300 backdrop-blur-sm
