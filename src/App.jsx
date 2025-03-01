@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Doctors from './pages/Doctors'
@@ -14,10 +14,12 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import LoadingOverlay from './components/LoadingOverlay'
 import { ToastContainer} from 'react-toastify';
+import socket from './socket'
 import 'react-toastify/dist/ReactToastify.css';
+import Chat from './components/Chat'
 
 const App = () => {
-  const {loading1} = useContext(AppContext);
+  const {loading1, userData} = useContext(AppContext);
   if(loading1){
     return (
       console.log("Loading"),
@@ -38,6 +40,7 @@ const App = () => {
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path='/my-appointments' element={<MyAppointments />} />
         <Route path='/appointments/:docId' element={<Appointment />} />
+        <Route path='/chat' element={<Chat userId={userData._id}/>} />
       </Routes>
       <Footer />
     </div>

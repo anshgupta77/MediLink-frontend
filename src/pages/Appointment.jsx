@@ -10,10 +10,11 @@ import { Info, CheckCircle, Calendar } from 'lucide-react';
 
 import ScrollContainer from '../components/ScrollArrowContainer';
 import LoadingOverlay from '../components/LoadingOverlay';
+import DoctorChatBox from '../components/DoctorChatBox';
 
 const Appointment = () => {
   const { docId } = useParams();
-  const { doctors, currencySymbol, backendUrl, token, getDoctorsData } = useContext(AppContext);
+  const { doctors, currencySymbol, backendUrl, token, getDoctorsData, userData } = useContext(AppContext);
   const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const navigate = useNavigate();
   
@@ -249,6 +250,14 @@ const Appointment = () => {
             <div className="mt-12">
               <RelatedDoctors docId={docId} speciality={docInfo.speciality} />
             </div>
+
+
+            <DoctorChatBox 
+            userId={userData._id}
+            docId={docId} 
+            docName={docInfo.name}
+            docImage={docInfo.image}
+            />
       </div>
     </div>
   );
