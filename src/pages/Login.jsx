@@ -39,6 +39,7 @@ const Login = () => {
           toast.error(data.message);
         }
       }
+      navigate("/");
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong");
     } finally {
@@ -46,11 +47,11 @@ const Login = () => {
     }
   }
 
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate("/");
+  //   }
+  // }, [token]);
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 bg-gradient-to-b from-[#1a1445] to-[#2a1d5d]">
