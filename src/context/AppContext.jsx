@@ -2,13 +2,13 @@ import { createContext, useEffect, useState } from "react";
 // import { doctors } from '../assets/assets_frontend/assets'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { backendUrl } from "../constraint";
 
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
 
     const currencySymbol = "$";
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     console.log(backendUrl)
 
     const [doctors, setDoctors] = useState([]);
