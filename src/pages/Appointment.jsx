@@ -14,7 +14,7 @@ import DoctorChatBox from '../components/DoctorChatBox';
 
 const Appointment = () => {
   const { docId } = useParams();
-  const { doctors, currencySymbol, backendUrl, token, getDoctorsData } = useContext(AppContext);
+  const { doctors, currencySymbol, backendUrl, token, getDoctorsData, userData } = useContext(AppContext);
   const daysofWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const navigate = useNavigate();
   
@@ -253,6 +253,7 @@ const Appointment = () => {
 
 
             <DoctorChatBox 
+            userId={userData._id}
             docId={docId} 
             docName={docInfo.name}
             docImage={docInfo.image}

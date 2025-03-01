@@ -3,8 +3,9 @@ import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { Send, X, MessageSquare } from 'lucide-react';
 import { toast } from 'react-toastify';
+import socket from '../socket';
 
-const DoctorChatBox = ({ docId, docName, docImage }) => {
+const DoctorChatBox = ({userId, docId, docName, docImage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -17,7 +18,13 @@ const DoctorChatBox = ({ docId, docName, docImage }) => {
   // Fetch chat history when component mounts
   useEffect(() => {
     if (isOpen && token) {
-      fetchChatHistory();
+        fetchChatHistory();
+        socket.connect();
+        socket.emit("clientOnline", {clientId: userId});
+
+        socket.on("receiveMessage", ({senderId, receiverId, message, timestamp, sender}) => {
+        setMessages((prev) => [...prev, {senderId, receiverId, message, timestamp, sender}]);
+        });
     }
   }, [isOpen, docId]);
   
@@ -47,11 +54,10 @@ const DoctorChatBox = ({ docId, docName, docImage }) => {
     
     setLoading(true);
     try {
-      const { data } = await axios.get(`${backendUrl}/api/chat/history/${docId}`, {
-        headers: { token }
-      });
+      const { data } = await axios.get(`${backendUrl}/api/chat/${userId}/${docId}`);
       
       if (data.success) {
+        console.log(data.messages);
         setMessages(data.messages || []);
       }
     } catch (error) {
@@ -72,22 +78,20 @@ const DoctorChatBox = ({ docId, docName, docImage }) => {
     }
     
     const newMessage = {
-      content: message,
+      message: message,
       sender: 'user',
       timestamp: new Date().toISOString(),
-      _id: 'temp-' + Date.now()
+      _id: 'temp-' + Date.now(),
+      senderId: userId,
+      receiverId: docId,
     };
     
     setMessages(prev => [...prev, newMessage]);
     setMessage('');
+    socket.emit("sendMessage", newMessage);
     
     try {
-      const { data } = await axios.post(`${backendUrl}/api/chat/send`, {
-        docId,
-        message: message.trim()
-      }, {
-        headers: { token }
-      });
+      const { data } = await axios.post(`${backendUrl}/api/chat/sendMessage`, newMessage);
       
       if (data.success) {
         // Replace temp message with confirmed one from server
@@ -172,7 +176,7 @@ const DoctorChatBox = ({ docId, docName, docImage }) => {
                     ? 'bg-purple-500 text-white rounded-br-none' 
                     : 'bg-white/10 text-gray-200 rounded-bl-none'
                 }`}>
-                  <p>{msg.content}</p>
+                  <p>{msg.message}</p>
                   <span className="text-xs opacity-70 block text-right mt-1">
                     {formatTime(msg.timestamp)}
                   </span>
