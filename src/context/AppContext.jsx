@@ -66,7 +66,7 @@ const AppContextProvider = (props) => {
         speciality,setSpeciality,
         setSearch, search,
         loading1, setLoading1,
-        loading2, setLoading2
+        loading2, setLoading2,
     }
 
     useEffect(() => {

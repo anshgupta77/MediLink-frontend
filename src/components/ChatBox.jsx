@@ -5,13 +5,14 @@ import { Send, X, MessageSquare } from 'lucide-react';
 import { toast } from 'react-toastify';
 import socket from '../socket';
 
-const DoctorChatBox = ({userId, docId, docName, docImage }) => {
+const ChatBox = ({userId, docId, docName, docImage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const chatBoxRef = useRef(null);
+  const [activeDoctorId, setActiveDoctorId] = useState(null);
   
   const { token, backendUrl, user } = useContext(AppContext);
   
@@ -24,6 +25,10 @@ const DoctorChatBox = ({userId, docId, docName, docImage }) => {
 
         socket.on("receiveMessage", ({senderId, receiverId, message, timestamp, sender}) => {
         setMessages((prev) => [...prev, {senderId, receiverId, message, timestamp, sender}]);
+        });
+
+        socket.on("ActiveClients", (clientId) => {
+          setActiveDoctorId(clientId);
         });
     }
   }, [isOpen, docId]);
@@ -143,7 +148,7 @@ const DoctorChatBox = ({userId, docId, docName, docImage }) => {
             />
             <div>
               <h3 className="font-semibold text-white">{docName}</h3>
-              <p className="text-xs text-gray-300">Online</p>
+              <p className="text-xs text-gray-300">{activeDoctorId === docId ? "Online": ""}</p>
             </div>
           </div>
           <button 
@@ -211,4 +216,4 @@ const DoctorChatBox = ({userId, docId, docName, docImage }) => {
   );
 };
 
-export default DoctorChatBox;
+export default ChatBox;

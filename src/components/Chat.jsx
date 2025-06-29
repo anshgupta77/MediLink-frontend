@@ -7,7 +7,7 @@ const Chat = ({ userId }) => {
   const [newMessage, setNewMessage] = useState("");
   const [receiverId, setReceiverId] = useState(""); // Chat partner's ID
     console.log(userId);
-  // 🟢 Fetch old messages when receiverId changes
+  
   useEffect(() => {
     const fetchMessages = async () => {
       if (!receiverId) return; // Don't fetch if receiver ID is empty

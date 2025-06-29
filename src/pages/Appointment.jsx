@@ -10,7 +10,7 @@ import { Info, CheckCircle, Calendar } from 'lucide-react';
 
 import ScrollContainer from '../components/ScrollArrowContainer';
 import LoadingOverlay from '../components/LoadingOverlay';
-import DoctorChatBox from '../components/DoctorChatBox';
+import ChatBox from '../components/ChatBox';
 
 const Appointment = () => {
   const { docId } = useParams();
@@ -252,7 +252,7 @@ const Appointment = () => {
             </div>
 
 
-            <DoctorChatBox 
+            <ChatBox 
             userId={userData._id}
             docId={docId} 
             docName={docInfo.name}

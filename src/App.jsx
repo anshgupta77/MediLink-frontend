@@ -17,9 +17,35 @@ import { ToastContainer} from 'react-toastify';
 import socket from './socket'
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './components/Chat'
+import { useLocation, useNavigate } from 'react-router-dom';
+
+
+
 
 const App = () => {
   const {loading1, userData} = useContext(AppContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
+
+    if (token) {
+      // Save token to localStorage or cookies
+      localStorage.setItem("token", token);
+
+      // Optionally remove token from URL after storing it
+      navigate("/", { replace: true });
+    }
+  }, [location, navigate]);
+
+
+  const token = localStorage.getItem("token");
+
+ 
+
+
   if(loading1){
     return (
       console.log("Loading"),
